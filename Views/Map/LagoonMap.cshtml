@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "PUP Lagoon Map";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2>PUP Lagoon Stall Map</h2>
+        <button type="button" id="btnRecenter" class="btn btn-outline-primary btn-sm">
+            Center on Lagoon
+        </button>
+    </div>
+
+    <div id="lagoonMap" style="height: 500px; width: 100%; border-radius: 8px; border: 1px solid #ccc;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    /* global L */
+    const lagoonCenter = [14.5979, 121.0108];
+
+    const map = L.map('lagoonMap').setView(lagoonCenter, 18);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const sampleStalls = [
+        { name: "Lagoon Silog Corner", landmark: "Near North Entrance", lat: 14.5980, lng: 121.0107 },
+        { name: "Ate Mel's Lutong Bahay", landmark: "Center Walkway", lat: 14.5978, lng: 121.0109 },
+        { name: "PUP Fruit Shake & Snacks", landmark: "Near Amphitheater Side", lat: 14.5977, lng: 121.0106 }
+    ];
+
+    sampleStalls.forEach(stall => {
+        L.marker([stall.lat, stall.lng])
+            .addTo(map)
+            .bindPopup(`<b>${stall.name}</b><br><small>${stall.landmark}</small>`);
+    });
+
+    const recenterBtn = document.getElementById('btnRecenter');
+    if (recenterBtn) {
+        recenterBtn.addEventListener('click', () => {
+            map.flyTo(lagoonCenter, 18);
+        });
+    }
+</script>
